@@ -47,7 +47,7 @@ export default function Reports() {
   if (!selectedCompanyId) {
     return (
       <AppLayout>
-        <p className="text-slate-400">Select or create a company first from the top bar.</p>
+        <p className="text-ink-500">Select or create a company first from the top bar.</p>
       </AppLayout>
     );
   }
@@ -55,26 +55,26 @@ export default function Reports() {
   return (
     <AppLayout>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-white">Reports</h1>
+        <h1 className="text-2xl font-semibold text-ink-900">Reports</h1>
         <button className="btn-primary" onClick={generate} disabled={generating}>
           {generating ? "Generating…" : "Generate PDF Report"}
         </button>
       </div>
 
-      {error && <p className="mb-4 rounded-lg bg-red-950 px-3 py-2 text-sm text-red-400">{error}</p>}
+      {error && <p className="mb-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>}
 
       <div className="card">
-        <p className="mb-3 text-sm text-slate-400">
+        <p className="mb-3 text-sm text-ink-500">
           Each report includes an executive summary, financial summary, health score breakdown, risk analysis,
           revenue forecast, and AI recommendations.
         </p>
         <div className="space-y-2">
-          {reports.length === 0 && <p className="text-sm text-slate-500">No reports generated yet.</p>}
+          {reports.length === 0 && <p className="text-sm text-ink-400">No reports generated yet.</p>}
           {reports.map((r) => (
-            <div key={r.id} className="flex items-center justify-between rounded-lg border border-slate-800 px-4 py-3">
+            <div key={r.id} className="flex items-center justify-between rounded-lg border border-ink-100 px-4 py-3">
               <div>
-                <p className="text-sm font-medium text-white">Full Health Report</p>
-                <p className="text-xs text-slate-400">{new Date(r.created_at).toLocaleString()}</p>
+                <p className="text-sm font-medium text-ink-900">Full Health Report</p>
+                <p className="text-xs text-ink-500">{new Date(r.created_at).toLocaleString()}</p>
               </div>
               <button className="btn-secondary text-xs" onClick={() => download(r.id)}>
                 Download PDF

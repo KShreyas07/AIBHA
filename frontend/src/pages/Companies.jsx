@@ -37,18 +37,18 @@ export default function Companies() {
 
   return (
     <AppLayout>
-      <h1 className="mb-6 text-2xl font-semibold text-white">Company Management</h1>
+      <h1 className="mb-6 text-2xl font-semibold text-ink-900">Company Management</h1>
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-3">
-          {companies.length === 0 && <p className="text-sm text-slate-500">No companies yet — add your first one.</p>}
+          {companies.length === 0 && <p className="text-sm text-ink-400">No companies yet — add your first one.</p>}
           {companies.map((c) => (
             <div
               key={c.id}
-              className={`card flex items-center justify-between ${c.id === selectedCompanyId ? "border-brand-600" : ""}`}
+              className={`card flex items-center justify-between ${c.id === selectedCompanyId ? "border-brand-500" : ""}`}
             >
               <div>
-                <p className="font-medium text-white">{c.name}</p>
-                <p className="text-xs text-slate-400">
+                <p className="font-medium text-ink-900">{c.name}</p>
+                <p className="text-xs text-ink-500">
                   {c.industry} · {c.country} · {c.business_size} · {c.employees} employees · FY {c.financial_year}
                 </p>
               </div>
@@ -56,7 +56,7 @@ export default function Companies() {
                 <button className="btn-secondary text-xs" onClick={() => selectCompany(c.id)}>
                   {c.id === selectedCompanyId ? "Selected" : "Select"}
                 </button>
-                <button className="btn-secondary text-xs text-red-400" onClick={() => onDelete(c.id)}>
+                <button className="btn-secondary text-xs text-red-600" onClick={() => onDelete(c.id)}>
                   Delete
                 </button>
               </div>
@@ -65,8 +65,8 @@ export default function Companies() {
         </div>
 
         <form onSubmit={onSubmit} className="card h-fit space-y-3">
-          <h2 className="font-semibold text-white">Add Company</h2>
-          {error && <p className="rounded-lg bg-red-950 px-3 py-2 text-sm text-red-400">{error}</p>}
+          <h2 className="font-semibold text-ink-900">Add Company</h2>
+          {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>}
           <div>
             <label className="label">Company Name</label>
             <input className="input" name="name" required value={form.name} onChange={onChange} />

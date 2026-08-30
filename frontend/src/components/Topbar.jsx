@@ -8,7 +8,7 @@ export default function Topbar() {
   const navigate = useNavigate();
 
   return (
-    <header className="flex items-center justify-between border-b border-slate-800 bg-slate-950/80 px-6 py-3">
+    <header className="flex items-center justify-between border-b border-ink-100 bg-cream-50 px-6 py-3">
       <div className="flex items-center gap-3">
         <select
           className="input max-w-xs"
@@ -27,7 +27,7 @@ export default function Topbar() {
         </button>
       </div>
       <div className="flex items-center gap-4">
-        <span className="text-sm text-slate-400">{user?.full_name}</span>
+        <span className="text-sm text-ink-500">{user?.full_name}</span>
         <button className="btn-secondary text-xs" onClick={logout}>
           Logout
         </button>

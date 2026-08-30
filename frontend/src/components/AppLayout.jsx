@@ -4,7 +4,7 @@ import ChatWidget from "./ChatWidget";
 
 export default function AppLayout({ children }) {
   return (
-    <div className="flex min-h-screen bg-slate-950">
+    <div className="flex min-h-screen bg-cream-100">
       <Sidebar />
       <div className="flex flex-1 flex-col">
         <Topbar />

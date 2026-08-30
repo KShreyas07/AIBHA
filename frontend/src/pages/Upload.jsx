@@ -54,10 +54,10 @@ const FORMAT_GUIDE = {
 };
 
 const STATUS_STYLES = {
-  uploaded: "bg-slate-700 text-slate-200",
-  processing: "bg-amber-900 text-amber-300",
-  processed: "bg-emerald-900 text-emerald-300",
-  failed: "bg-red-900 text-red-300",
+  uploaded: "bg-cream-200 text-ink-700",
+  processing: "bg-amber-50 text-amber-700",
+  processed: "bg-emerald-50 text-emerald-700",
+  failed: "bg-red-50 text-red-600",
 };
 
 export default function Upload() {
@@ -103,19 +103,19 @@ export default function Upload() {
   if (!selectedCompanyId) {
     return (
       <AppLayout>
-        <p className="text-slate-400">Select or create a company first from the top bar.</p>
+        <p className="text-ink-500">Select or create a company first from the top bar.</p>
       </AppLayout>
     );
   }
 
   return (
     <AppLayout>
-      <h1 className="mb-6 text-2xl font-semibold text-white">Upload Data</h1>
+      <h1 className="mb-6 text-2xl font-semibold text-ink-900">Upload Data</h1>
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="space-y-6">
           <form onSubmit={onSubmit} className="card h-fit space-y-4">
-            <h2 className="font-semibold text-white">New Upload</h2>
-            {error && <p className="rounded-lg bg-red-950 px-3 py-2 text-sm text-red-400">{error}</p>}
+            <h2 className="font-semibold text-ink-900">New Upload</h2>
+            {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>}
             <div>
               <label className="label">Data Category</label>
               <select className="input" value={category} onChange={(e) => setCategory(e.target.value)}>
@@ -140,29 +140,29 @@ export default function Upload() {
           </form>
 
           <div className="card h-fit space-y-3">
-            <h2 className="font-semibold text-white">
+            <h2 className="font-semibold text-ink-900">
               Accepted Format — {CATEGORIES.find((c) => c.value === category)?.label}
             </h2>
-            <p className="text-sm text-slate-400">{FORMAT_GUIDE[category].note}</p>
+            <p className="text-sm text-ink-500">{FORMAT_GUIDE[category].note}</p>
             <div>
               <p className="label mb-1">Required</p>
-              <p className="text-sm text-slate-300">A date/period column (e.g. <code className="rounded bg-slate-800 px-1">date</code>)</p>
+              <p className="text-sm text-ink-700">A date/period column (e.g. <code className="rounded bg-cream-100 px-1">date</code>)</p>
             </div>
             <div>
               <p className="label mb-1">Recommended columns</p>
-              <ul className="list-inside list-disc space-y-0.5 text-sm text-slate-300">
+              <ul className="list-inside list-disc space-y-0.5 text-sm text-ink-700">
                 {FORMAT_GUIDE[category].columns.map((col) => (
-                  <li key={col}><code className="rounded bg-slate-800 px-1">{col}</code></li>
+                  <li key={col}><code className="rounded bg-cream-100 px-1">{col}</code></li>
                 ))}
               </ul>
             </div>
             <div>
               <p className="label mb-1">Example header row</p>
-              <code className="block overflow-x-auto rounded-lg bg-slate-800 px-3 py-2 text-xs text-brand-400">
+              <code className="block overflow-x-auto rounded-lg bg-cream-100 px-3 py-2 text-xs text-brand-500">
                 {FORMAT_GUIDE[category].example}
               </code>
             </div>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-ink-400">
               One row per month. Column names are case-insensitive and common synonyms are
               recognized automatically (e.g. "Total Revenue", "Net Income"). Files: CSV, Excel
               (.xlsx/.xls), or text-based PDF tables.
@@ -171,17 +171,17 @@ export default function Upload() {
         </div>
 
         <div className="lg:col-span-2 space-y-3">
-          <h2 className="font-semibold text-white">Upload History</h2>
-          {uploads.length === 0 && <p className="text-sm text-slate-500">No uploads yet.</p>}
+          <h2 className="font-semibold text-ink-900">Upload History</h2>
+          {uploads.length === 0 && <p className="text-sm text-ink-400">No uploads yet.</p>}
           {uploads.map((u) => (
             <div key={u.id} className="card flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-white">{u.filename}</p>
-                <p className="text-xs text-slate-400">
+                <p className="text-sm font-medium text-ink-900">{u.filename}</p>
+                <p className="text-xs text-ink-500">
                   {CATEGORIES.find((c) => c.value === u.data_category)?.label || u.data_category} ·{" "}
                   {new Date(u.created_at).toLocaleString()}
                 </p>
-                {u.error_message && <p className="mt-1 text-xs text-red-400">{u.error_message}</p>}
+                {u.error_message && <p className="mt-1 text-xs text-red-600">{u.error_message}</p>}
               </div>
               <span className={`rounded-full px-2 py-1 text-xs ${STATUS_STYLES[u.status] || ""}`}>{u.status}</span>
             </div>

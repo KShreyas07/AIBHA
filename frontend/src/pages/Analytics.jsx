@@ -14,7 +14,7 @@ const METRIC_LABELS = {
 function PercentileBar({ percentile }) {
   const color = percentile >= 60 ? "bg-emerald-500" : percentile >= 35 ? "bg-amber-500" : "bg-red-500";
   return (
-    <div className="h-2 w-full rounded-full bg-slate-800">
+    <div className="h-2 w-full rounded-full bg-cream-100">
       <div className={`h-2 rounded-full ${color}`} style={{ width: `${Math.max(4, percentile)}%` }} />
     </div>
   );
@@ -38,25 +38,25 @@ export default function Analytics() {
   if (!selectedCompanyId) {
     return (
       <AppLayout>
-        <p className="text-slate-400">Select or create a company first from the top bar.</p>
+        <p className="text-ink-500">Select or create a company first from the top bar.</p>
       </AppLayout>
     );
   }
 
   return (
     <AppLayout>
-      <h1 className="mb-6 text-2xl font-semibold text-white">Analytics</h1>
+      <h1 className="mb-6 text-2xl font-semibold text-ink-900">Analytics</h1>
 
       <div className="card mb-6">
-        <h2 className="mb-3 font-semibold text-white">Industry Benchmarking</h2>
-        {error && !benchmark && <p className="text-sm text-slate-500">{error}</p>}
+        <h2 className="mb-3 font-semibold text-ink-900">Industry Benchmarking</h2>
+        {error && !benchmark && <p className="text-sm text-ink-400">{error}</p>}
         {benchmark && (
           <div className="space-y-4">
             {Object.entries(benchmark.metrics).map(([key, m]) => (
               <div key={key}>
                 <div className="mb-1 flex justify-between text-sm">
-                  <span className="text-slate-300">{METRIC_LABELS[key] || key}</span>
-                  <span className="text-slate-400">
+                  <span className="text-ink-700">{METRIC_LABELS[key] || key}</span>
+                  <span className="text-ink-500">
                     You: {m.company_value} · Industry avg: {m.industry_average} · Percentile: {m.percentile}%
                   </span>
                 </div>
@@ -68,10 +68,10 @@ export default function Analytics() {
       </div>
 
       <div className="card overflow-x-auto">
-        <h2 className="mb-3 font-semibold text-white">Monthly Financial Data</h2>
+        <h2 className="mb-3 font-semibold text-ink-900">Monthly Financial Data</h2>
         <table className="w-full min-w-[900px] text-left text-sm">
           <thead>
-            <tr className="border-b border-slate-800 text-slate-400">
+            <tr className="border-b border-ink-100 text-ink-500">
               <th className="py-2 pr-4">Period</th>
               <th className="py-2 pr-4">Revenue</th>
               <th className="py-2 pr-4">Net Profit</th>
@@ -85,7 +85,7 @@ export default function Analytics() {
           </thead>
           <tbody>
             {rows.map((r) => (
-              <tr key={r.id} className="border-b border-slate-900 text-slate-300">
+              <tr key={r.id} className="border-b border-ink-200 text-ink-700">
                 <td className="py-2 pr-4">{r.period}</td>
                 <td className="py-2 pr-4">{r.revenue.toLocaleString()}</td>
                 <td className="py-2 pr-4">{r.net_profit.toLocaleString()}</td>
@@ -99,7 +99,7 @@ export default function Analytics() {
             ))}
             {rows.length === 0 && (
               <tr>
-                <td colSpan={9} className="py-4 text-center text-slate-500">No data yet — upload and process files first.</td>
+                <td colSpan={9} className="py-4 text-center text-ink-400">No data yet — upload and process files first.</td>
               </tr>
             )}
           </tbody>

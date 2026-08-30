@@ -57,10 +57,10 @@ export default function ChatWidget() {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 flex h-[32rem] w-96 flex-col overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-2xl">
-      <div className="flex items-center justify-between border-b border-slate-800 bg-slate-950 px-4 py-3">
-        <p className="text-sm font-semibold text-white">AI Chat Assistant</p>
-        <button onClick={() => setOpen(false)} className="text-slate-400 hover:text-white">
+    <div className="fixed bottom-6 right-6 flex h-[32rem] w-96 flex-col overflow-hidden rounded-3xl border border-ink-100 bg-white shadow-2xl shadow-ink-900/10">
+      <div className="flex items-center justify-between border-b border-ink-100 bg-cream-50 px-4 py-3">
+        <p className="font-display text-sm font-semibold text-ink-900">AI Chat Assistant</p>
+        <button onClick={() => setOpen(false)} className="text-ink-400 hover:text-ink-900">
           ✕
         </button>
       </div>
@@ -68,23 +68,23 @@ export default function ChatWidget() {
         {messages.map((m, i) => (
           <div
             key={i}
-            className={`max-w-[85%] rounded-lg px-3 py-2 text-sm ${
-              m.role === "user" ? "ml-auto bg-brand-600 text-white" : "bg-slate-800 text-slate-100"
+            className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm ${
+              m.role === "user" ? "ml-auto bg-ink-900 text-cream-50" : "bg-cream-100 text-ink-900"
             }`}
           >
             {m.text}
           </div>
         ))}
-        {sending && <div className="text-xs text-slate-500">Thinking…</div>}
+        {sending && <div className="text-xs text-ink-400">Thinking…</div>}
         <div ref={endRef} />
       </div>
       {messages.length <= 1 && (
-        <div className="flex flex-wrap gap-1 border-t border-slate-800 p-2">
+        <div className="flex flex-wrap gap-1 border-t border-ink-100 p-2">
           {SUGGESTIONS.map((s) => (
             <button
               key={s}
               onClick={() => send(s)}
-              className="rounded-full border border-slate-700 px-2 py-1 text-[11px] text-slate-400 hover:bg-slate-800"
+              className="rounded-full border border-ink-200 px-2 py-1 text-[11px] text-ink-500 hover:bg-cream-100"
             >
               {s}
             </button>
@@ -96,7 +96,7 @@ export default function ChatWidget() {
           e.preventDefault();
           send();
         }}
-        className="flex gap-2 border-t border-slate-800 p-3"
+        className="flex gap-2 border-t border-ink-100 p-3"
       >
         <input
           className="input"

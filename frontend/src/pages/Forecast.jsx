@@ -67,14 +67,14 @@ export default function Forecast() {
   if (!selectedCompanyId) {
     return (
       <AppLayout>
-        <p className="text-slate-400">Select or create a company first from the top bar.</p>
+        <p className="text-ink-500">Select or create a company first from the top bar.</p>
       </AppLayout>
     );
   }
 
   return (
     <AppLayout>
-      <h1 className="mb-6 text-2xl font-semibold text-white">Forecast</h1>
+      <h1 className="mb-6 text-2xl font-semibold text-ink-900">Forecast</h1>
 
       <div className="card mb-6 flex flex-wrap items-end gap-4">
         <div>
@@ -95,10 +95,10 @@ export default function Forecast() {
         <button className="btn-primary" onClick={runForecast} disabled={loading}>
           {loading ? "Forecasting…" : "Generate Forecast"}
         </button>
-        {result && <span className="text-xs text-slate-500">Model: {result.model_used}</span>}
+        {result && <span className="text-xs text-ink-400">Model: {result.model_used}</span>}
       </div>
 
-      {error && <p className="mb-4 rounded-lg bg-red-950 px-3 py-2 text-sm text-red-400">{error}</p>}
+      {error && <p className="mb-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>}
 
       {result && (
         <div className="card">

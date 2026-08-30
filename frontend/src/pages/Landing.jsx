@@ -9,13 +9,19 @@ const FEATURES = [
   { icon: "💬", title: "Chat Assistant", desc: "Ask questions about your business in plain English." },
 ];
 
+const STATS = [
+  { value: "12", label: "financial ratios engineered automatically from your uploads" },
+  { value: "0–100", label: "weighted Business Health Score, validated against real outcomes" },
+  { value: "6 & 12mo", label: "AI-selected revenue, profit, expense & cash flow forecasts" },
+];
+
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="min-h-screen bg-cream-100 text-ink-900">
       <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
         <div className="flex items-center gap-2">
           <span className="text-2xl">🧠</span>
-          <span className="font-semibold">AI Business Health Analyzer</span>
+          <span className="font-display font-semibold">AI Business Health Analyzer</span>
         </div>
         <div className="flex gap-3">
           <Link to="/login" className="btn-secondary">Login</Link>
@@ -23,17 +29,29 @@ export default function Landing() {
         </div>
       </header>
 
-      <section className="mx-auto max-w-4xl px-6 py-20 text-center">
-        <h1 className="text-4xl font-bold leading-tight md:text-5xl">
-          Know your business's health <span className="text-brand-400">before it's a problem.</span>
+      <section className="mx-auto max-w-4xl px-6 py-24 text-center">
+        <h1 className="font-display text-5xl font-semibold leading-[1.05] tracking-tight md:text-7xl">
+          Know your business's health
+          <span className="block text-brand-500">before it's a problem.</span>
         </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-slate-400">
+        <p className="mx-auto mt-6 max-w-2xl text-lg text-ink-500">
           Upload your financials, and let machine learning and AI predict performance, score your business health,
           detect risks, and recommend what to do next.
         </p>
-        <div className="mt-8 flex justify-center gap-3">
+        <div className="mt-10 flex justify-center gap-3">
           <Link to="/register" className="btn-primary px-6 py-3 text-base">Start Free Analysis</Link>
           <Link to="/login" className="btn-secondary px-6 py-3 text-base">I have an account</Link>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-6 pb-20">
+        <div className="grid grid-cols-1 gap-6 rounded-4xl border border-ink-100 bg-white p-10 sm:grid-cols-3">
+          {STATS.map((s) => (
+            <div key={s.label} className="text-center sm:text-left">
+              <p className="font-display text-4xl font-semibold text-ink-900">{s.value}</p>
+              <p className="mt-2 text-sm text-ink-500">{s.label}</p>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -41,8 +59,8 @@ export default function Landing() {
         {FEATURES.map((f) => (
           <div key={f.title} className="card">
             <div className="text-3xl">{f.icon}</div>
-            <h3 className="mt-3 font-semibold text-white">{f.title}</h3>
-            <p className="mt-1 text-sm text-slate-400">{f.desc}</p>
+            <h3 className="mt-3 font-display font-semibold text-ink-900">{f.title}</h3>
+            <p className="mt-1 text-sm text-ink-500">{f.desc}</p>
           </div>
         ))}
       </section>

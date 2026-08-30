@@ -21,15 +21,15 @@ export default function Login() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-cream-100 px-4">
       <div className="w-full max-w-sm">
         <div className="mb-6 text-center">
           <span className="text-3xl">🧠</span>
-          <h1 className="mt-2 text-xl font-semibold text-white">Welcome back</h1>
-          <p className="text-sm text-slate-400">Sign in to your Business Health Analyzer account</p>
+          <h1 className="mt-2 font-display text-xl font-semibold text-ink-900">Welcome back</h1>
+          <p className="text-sm text-ink-500">Sign in to your Business Health Analyzer account</p>
         </div>
         <form onSubmit={onSubmit} className="card space-y-4">
-          {error && <p className="rounded-lg bg-red-950 px-3 py-2 text-sm text-red-400">{error}</p>}
+          {error && <p className="rounded-2xl bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
           <div>
             <label className="label">Email</label>
             <input className="input" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -42,8 +42,8 @@ export default function Login() {
             {loading ? "Signing in…" : "Sign In"}
           </button>
         </form>
-        <p className="mt-4 text-center text-sm text-slate-400">
-          No account? <Link to="/register" className="text-brand-400 hover:underline">Register</Link>
+        <p className="mt-4 text-center text-sm text-ink-500">
+          No account? <Link to="/register" className="text-brand-500 hover:underline">Register</Link>
         </p>
       </div>
     </div>

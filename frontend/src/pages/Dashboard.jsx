@@ -9,7 +9,7 @@ import { CHART_COLORS, baseLineOptions, basePieOptions } from "../chartSetup";
 
 const money = (v) => (v == null ? "—" : `$${Number(v).toLocaleString(undefined, { maximumFractionDigits: 0 })}`);
 
-const RISK_COLOR = { Healthy: "text-emerald-400", Warning: "text-amber-400", Critical: "text-red-400" };
+const RISK_COLOR = { Healthy: "text-emerald-600", Warning: "text-amber-600", Critical: "text-red-600" };
 
 function trendDataset(points, label, color) {
   return {
@@ -81,7 +81,7 @@ export default function Dashboard() {
   if (!selectedCompanyId) {
     return (
       <AppLayout>
-        <p className="text-slate-400">Select or create a company first from the top bar.</p>
+        <p className="text-ink-500">Select or create a company first from the top bar.</p>
       </AppLayout>
     );
   }
@@ -90,43 +90,43 @@ export default function Dashboard() {
     <AppLayout>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-white">{selectedCompany?.name || "Dashboard"}</h1>
-          <p className="text-sm text-slate-400">{selectedCompany?.industry}</p>
+          <h1 className="text-2xl font-semibold text-ink-900">{selectedCompany?.name || "Dashboard"}</h1>
+          <p className="text-sm text-ink-500">{selectedCompany?.industry}</p>
         </div>
         <button className="btn-primary" onClick={runAnalysis} disabled={running}>
           {running ? "Analyzing…" : "Run Full Analysis"}
         </button>
       </div>
 
-      {error && <p className="mb-4 rounded-lg bg-red-950 px-3 py-2 text-sm text-red-400">{error}</p>}
+      {error && <p className="mb-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>}
 
       {!loading && data && !data.has_data && (
-        <p className="text-slate-400">No processed data yet. Head to Upload Data, then come back and run analysis.</p>
+        <p className="text-ink-500">No processed data yet. Head to Upload Data, then come back and run analysis.</p>
       )}
 
       {data?.has_data && (
         <>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             <StatCard label="Revenue" value={money(data.cards.revenue)} />
-            <StatCard label="Profit" value={money(data.cards.profit)} accent={data.cards.profit >= 0 ? "text-emerald-400" : "text-red-400"} />
+            <StatCard label="Profit" value={money(data.cards.profit)} accent={data.cards.profit >= 0 ? "text-emerald-600" : "text-red-600"} />
             <StatCard label="Expenses" value={money(data.cards.expenses)} />
             <StatCard label="Cash Flow" value={money(data.cards.cash_flow)} />
             <StatCard label="Health Score" value={data.cards.health_score ?? "—"} />
             <StatCard
               label="Risk Level"
               value={data.cards.risk_level ?? "—"}
-              accent={RISK_COLOR[data.cards.risk_level] || "text-white"}
+              accent={RISK_COLOR[data.cards.risk_level] || "text-ink-900"}
             />
             <StatCard label="Prediction" value={data.cards.prediction ?? "—"} />
           </div>
 
           <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
             <div className="card flex flex-col items-center justify-center lg:col-span-1">
-              <p className="mb-2 text-sm font-medium text-slate-300">Business Health Score</p>
+              <p className="mb-2 text-sm font-medium text-ink-700">Business Health Score</p>
               <HealthGauge score={data.health_score_gauge.score} label={data.health_score_gauge.label} />
             </div>
             <div className="card lg:col-span-2">
-              <p className="mb-3 text-sm font-medium text-slate-300">Revenue Trend</p>
+              <p className="mb-3 text-sm font-medium text-ink-700">Revenue Trend</p>
               <div className="h-52">
                 <Line data={trendDataset(data.charts.revenue_trend, "Revenue", CHART_COLORS.brand)} options={baseLineOptions} />
               </div>
@@ -135,25 +135,25 @@ export default function Dashboard() {
 
           <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
             <div className="card">
-              <p className="mb-3 text-sm font-medium text-slate-300">Profit Trend</p>
+              <p className="mb-3 text-sm font-medium text-ink-700">Profit Trend</p>
               <div className="h-48">
                 <Line data={trendDataset(data.charts.profit_trend, "Profit", CHART_COLORS.green)} options={baseLineOptions} />
               </div>
             </div>
             <div className="card">
-              <p className="mb-3 text-sm font-medium text-slate-300">Expense Trend</p>
+              <p className="mb-3 text-sm font-medium text-ink-700">Expense Trend</p>
               <div className="h-48">
                 <Line data={trendDataset(data.charts.expense_trend, "Expenses", CHART_COLORS.amber)} options={baseLineOptions} />
               </div>
             </div>
             <div className="card">
-              <p className="mb-3 text-sm font-medium text-slate-300">Cash Flow Trend</p>
+              <p className="mb-3 text-sm font-medium text-ink-700">Cash Flow Trend</p>
               <div className="h-48">
                 <Line data={trendDataset(data.charts.cash_flow_trend, "Cash Balance", CHART_COLORS.slate)} options={baseLineOptions} />
               </div>
             </div>
             <div className="card">
-              <p className="mb-3 text-sm font-medium text-slate-300">Expense Breakdown</p>
+              <p className="mb-3 text-sm font-medium text-ink-700">Expense Breakdown</p>
               <div className="h-48">
                 <Pie data={pieDataset(data.pie_charts.expenses)} options={basePieOptions} />
               </div>
@@ -162,13 +162,13 @@ export default function Dashboard() {
 
           <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
             <div className="card">
-              <p className="mb-3 text-sm font-medium text-slate-300">Revenue Composition</p>
+              <p className="mb-3 text-sm font-medium text-ink-700">Revenue Composition</p>
               <div className="h-48">
                 <Pie data={pieDataset(data.pie_charts.revenue_composition)} options={basePieOptions} />
               </div>
             </div>
             <div className="card">
-              <p className="mb-3 text-sm font-medium text-slate-300">Inventory</p>
+              <p className="mb-3 text-sm font-medium text-ink-700">Inventory</p>
               <div className="h-48">
                 <Pie data={pieDataset(data.pie_charts.inventory)} options={basePieOptions} />
               </div>

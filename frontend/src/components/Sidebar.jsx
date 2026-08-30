@@ -13,12 +13,12 @@ const NAV_ITEMS = [
 
 export default function Sidebar() {
   return (
-    <aside className="hidden w-64 shrink-0 flex-col border-r border-slate-800 bg-slate-950/80 p-4 md:flex">
+    <aside className="hidden w-64 shrink-0 flex-col border-r border-ink-100 bg-cream-50 p-4 md:flex">
       <div className="mb-8 flex items-center gap-2 px-2">
         <span className="text-2xl">🧠</span>
         <div>
-          <p className="text-sm font-semibold text-white leading-tight">AI Business</p>
-          <p className="text-xs text-slate-400 leading-tight">Health Analyzer</p>
+          <p className="font-display text-sm font-semibold text-ink-900 leading-tight">AI Business</p>
+          <p className="text-xs text-ink-500 leading-tight">Health Analyzer</p>
         </div>
       </div>
       <nav className="flex flex-1 flex-col gap-1">
@@ -27,10 +27,10 @@ export default function Sidebar() {
             key={item.to}
             to={item.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition ${
+              `flex items-center gap-3 rounded-full px-3 py-2 text-sm font-medium transition ${
                 isActive
-                  ? "bg-brand-600/20 text-brand-400"
-                  : "text-slate-400 hover:bg-slate-900 hover:text-slate-100"
+                  ? "bg-ink-900 text-cream-50"
+                  : "text-ink-500 hover:bg-cream-200 hover:text-ink-900"
               }`
             }
           >
@@ -39,7 +39,7 @@ export default function Sidebar() {
           </NavLink>
         ))}
       </nav>
-      <p className="px-2 text-xs text-slate-600">v1.0.0 · SME Edition</p>
+      <p className="px-2 text-xs text-ink-300">v1.0.0 · SME Edition</p>
     </aside>
   );
 }

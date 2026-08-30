@@ -21,7 +21,7 @@ export default function HealthGauge({ score = 0, label = "N/A" }) {
   return (
     <div className="flex flex-col items-center">
       <svg width="200" height="120" viewBox="0 0 200 120">
-        <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#1e293b" strokeWidth="16" strokeLinecap="round" />
+        <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#EEE7D7" strokeWidth="16" strokeLinecap="round" />
         <path
           d={`M 20 100 A 80 80 0 ${largeArc} 1 ${x} ${y}`}
           fill="none"
@@ -30,7 +30,7 @@ export default function HealthGauge({ score = 0, label = "N/A" }) {
           strokeLinecap="round"
         />
       </svg>
-      <p className="-mt-6 text-3xl font-bold text-white">{Math.round(clamped)}</p>
+      <p className="-mt-6 font-display text-3xl font-bold text-ink-900">{Math.round(clamped)}</p>
       <p className="text-sm font-medium" style={{ color }}>{label}</p>
     </div>
   );
