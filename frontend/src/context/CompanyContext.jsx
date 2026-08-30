@@ -16,8 +16,17 @@ export function CompanyProvider({ children }) {
     try {
       const { data } = await api.get("/company");
       setCompanies(data);
-      if (!selectedCompanyId && data.length > 0) {
-        selectCompany(data[0].id);
+      // The stored selectedCompanyId may be stale — e.g. left over in localStorage
+      // from a different backend/database (same origin, different environment).
+      // Validate it against the freshly-fetched list rather than trusting it blindly.
+      const stillExists = data.some((c) => c.id === selectedCompanyId);
+      if (!stillExists) {
+        if (data.length > 0) {
+          selectCompany(data[0].id);
+        } else {
+          setSelectedCompanyId(null);
+          localStorage.removeItem("bha_company_id");
+        }
       }
     } finally {
       setLoading(false);
