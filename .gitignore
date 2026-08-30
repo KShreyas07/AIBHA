@@ -1,0 +1,24 @@
+.env
+.DS_Store
+
+backend/.venv
+backend/__pycache__/
+backend/**/__pycache__/
+backend/.pytest_cache
+backend/*.db
+backend/uploads/*
+backend/reports/*
+!backend/uploads/.gitkeep
+!backend/reports/.gitkeep
+
+# Research datasets are large and reproducible via research/prepare_*.py scripts —
+# don't commit the data itself, just the scripts and documentation.
+backend/research/datasets/*.csv
+backend/research/datasets/*.txt
+backend/research/datasets/forecast_timeseries/*.csv
+backend/research/results/*.joblib
+backend/research/results/*.png
+
+frontend/node_modules
+frontend/dist
+backend/catboost_info/

@@ -1,0 +1,2 @@
+model,accuracy,precision,recall,f1,roc_auc,pr_auc,true_positives,false_positives,true_negatives,false_negatives
+LightGBM,0.967008797653959,0.4857142857142857,0.38636363636363635,0.43037974683544306,0.8776687327823691,0.42133022957336896,17,18,1302,27
