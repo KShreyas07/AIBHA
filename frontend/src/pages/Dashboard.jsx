@@ -86,6 +86,8 @@ export default function Dashboard() {
     );
   }
 
+  const hasPrediction = data?.cards?.health_score != null;
+
   return (
     <AppLayout>
       <div className="mb-6 flex items-center justify-between">
@@ -106,24 +108,38 @@ export default function Dashboard() {
 
       {data?.has_data && (
         <>
+          {!hasPrediction && (
+            <p className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+              Data's uploaded and processed, but this company hasn't been analyzed yet — the health score, risk
+              level, and prediction below aren't available until you click <strong>Run Full Analysis</strong>.
+            </p>
+          )}
+
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             <StatCard label="Revenue" value={money(data.cards.revenue)} />
             <StatCard label="Profit" value={money(data.cards.profit)} accent={data.cards.profit >= 0 ? "text-emerald-600" : "text-red-600"} />
             <StatCard label="Expenses" value={money(data.cards.expenses)} />
             <StatCard label="Cash Flow" value={money(data.cards.cash_flow)} />
-            <StatCard label="Health Score" value={data.cards.health_score ?? "—"} />
+            <StatCard label="Health Score" value={data.cards.health_score ?? "Not analyzed"} />
             <StatCard
               label="Risk Level"
-              value={data.cards.risk_level ?? "—"}
+              value={data.cards.risk_level ?? "Not analyzed"}
               accent={RISK_COLOR[data.cards.risk_level] || "text-ink-900"}
             />
-            <StatCard label="Prediction" value={data.cards.prediction ?? "—"} />
+            <StatCard label="Prediction" value={data.cards.prediction ?? "Not analyzed"} />
           </div>
 
           <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
             <div className="card flex flex-col items-center justify-center lg:col-span-1">
               <p className="mb-2 text-sm font-medium text-ink-700">Business Health Score</p>
-              <HealthGauge score={data.health_score_gauge.score} label={data.health_score_gauge.label} />
+              {hasPrediction ? (
+                <HealthGauge score={data.health_score_gauge.score} label={data.health_score_gauge.label} />
+              ) : (
+                <div className="flex flex-col items-center py-6 text-center">
+                  <span className="text-3xl">🔍</span>
+                  <p className="mt-3 text-sm text-ink-500">Run analysis to see your score</p>
+                </div>
+              )}
             </div>
             <div className="card lg:col-span-2">
               <p className="mb-3 text-sm font-medium text-ink-700">Revenue Trend</p>
