@@ -15,11 +15,7 @@ export default function Sidebar() {
   return (
     <aside className="hidden w-64 shrink-0 flex-col border-r border-ink-100 bg-cream-50 p-4 md:flex">
       <div className="mb-8 flex items-center gap-2 px-2">
-        <span className="text-2xl">🧠</span>
-        <div>
-          <p className="font-display text-sm font-semibold text-ink-900 leading-tight">AI Business</p>
-          <p className="text-xs text-ink-500 leading-tight">Health Analyzer</p>
-        </div>
+        <p className="font-display text-lg font-semibold text-ink-900 leading-tight">AIBHA</p>
       </div>
       <nav className="flex flex-1 flex-col gap-1">
         {NAV_ITEMS.map((item) => (

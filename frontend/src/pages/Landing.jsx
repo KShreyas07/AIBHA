@@ -20,8 +20,7 @@ export default function Landing() {
     <div className="min-h-screen bg-cream-100 text-ink-900">
       <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
         <div className="flex items-center gap-2">
-          <span className="text-2xl">🧠</span>
-          <span className="font-display font-semibold">AI Business Health Analyzer</span>
+          <span className="font-display text-lg font-semibold">AIBHA</span>
         </div>
         <div className="flex gap-3">
           <Link to="/login" className="btn-secondary">Login</Link>

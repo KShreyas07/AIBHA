@@ -1,4 +1,4 @@
-# AI Business Health Analyzer
+# AIBHA
 
 An AI-powered Business Health Analyzer for Small and Medium Businesses (SMEs). Upload financial
 and operational data, and get a Business Health Score, ML-based classification, forecasts, risk

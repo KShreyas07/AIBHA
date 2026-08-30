@@ -41,7 +41,7 @@ def generate_report(db: Session, company: Company) -> Report:
     styles = getSampleStyleSheet()
     story = []
 
-    story.append(Paragraph(f"AI Business Health Report — {company.name}", styles["Title"]))
+    story.append(Paragraph(f"AIBHA Health Report — {company.name}", styles["Title"]))
     story.append(Paragraph(f"Generated {datetime.utcnow().strftime('%Y-%m-%d')} · {company.industry} · {company.country}", styles["Normal"]))
     story.append(Spacer(1, 0.5 * cm))
 

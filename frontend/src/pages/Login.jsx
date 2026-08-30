@@ -24,7 +24,7 @@ export default function Login() {
     <div className="flex min-h-screen items-center justify-center bg-cream-100 px-4">
       <div className="w-full max-w-sm">
         <div className="mb-6 text-center">
-          <span className="text-3xl">🧠</span>
+          <span className="font-display text-lg font-semibold text-ink-900">AIBHA</span>
           <h1 className="mt-2 font-display text-xl font-semibold text-ink-900">Welcome back</h1>
           <p className="text-sm text-ink-500">Sign in to your Business Health Analyzer account</p>
         </div>
