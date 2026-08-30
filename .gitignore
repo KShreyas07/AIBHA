@@ -1,6 +1,10 @@
 .env
 .DS_Store
 
+# Claude Code tooling config — local dev convenience only, not needed by
+# collaborators or the app itself.
+.claude/
+
 backend/.venv
 backend/__pycache__/
 backend/**/__pycache__/
