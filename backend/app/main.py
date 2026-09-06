@@ -9,7 +9,7 @@ from app.core.logging import setup_logging, get_logger
 
 import app.models  # noqa: F401 - registers every model on Base.metadata before routes load
 
-from app.api.v1 import auth, company, upload, analyze, predict, forecast, dashboard, recommendations, report, chat
+from app.api.v1 import auth, company, upload, analyze, predict, forecast, dashboard, recommendations, report, chat, goals
 
 setup_logging()
 logger = get_logger(__name__)
@@ -50,6 +50,7 @@ app.include_router(dashboard.router, prefix="/api/dashboard", tags=["Dashboard"]
 app.include_router(recommendations.router, prefix="/api/recommendations", tags=["Recommendations"])
 app.include_router(report.router, prefix="/api/report", tags=["Report"])
 app.include_router(chat.router, prefix="/api/chat", tags=["Chat Assistant"])
+app.include_router(goals.router, prefix="/api/goals", tags=["Goals"])
 
 
 @app.get("/api/health", tags=["System"])

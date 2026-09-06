@@ -10,6 +10,7 @@ from app.models.forecast import Forecast
 from app.models.prediction import Prediction
 from app.models.recommendation import Recommendation
 from app.models.report import Report
+from app.models.goal import Goal
 
 __all__ = [
     "User",
@@ -20,4 +21,5 @@ __all__ = [
     "Prediction",
     "Recommendation",
     "Report",
+    "Goal",
 ]
