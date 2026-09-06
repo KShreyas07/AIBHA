@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_current_user
+from app.api.deps import get_current_user, get_owned_company
 from app.database.session import get_db
+from app.models.company import Company
 from app.models.user import User
+from app.schemas.chat import ChatMessageOut
 from app.schemas.prediction import ChatRequest, ChatResponse
-from app.api.deps import get_owned_company
 
 router = APIRouter()
 
@@ -17,3 +18,18 @@ def chat(payload: ChatRequest, db: Session = Depends(get_db), current_user: User
 
     answer = answer_question(db, company, payload.message)
     return ChatResponse(answer=answer)
+
+
+@router.get("/{company_id}/history", response_model=list[ChatMessageOut])
+def history(company: Company = Depends(get_owned_company), db: Session = Depends(get_db)) -> list[ChatMessageOut]:
+    from app.services.chat_service import get_history
+
+    return [ChatMessageOut.model_validate(m) for m in get_history(db, company.id)]
+
+
+@router.delete("/{company_id}/history")
+def clear(company: Company = Depends(get_owned_company), db: Session = Depends(get_db)) -> dict:
+    from app.services.chat_service import clear_history
+
+    clear_history(db, company.id)
+    return {"cleared": True}

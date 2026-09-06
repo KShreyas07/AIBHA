@@ -25,11 +25,20 @@ Respond ONLY with JSON: a list of objects with keys:
   number only if the action itself costs money before it pays off.
 - "difficulty": low, medium, or high — how hard this is to actually implement"""
 
-CHAT_SYSTEM_PROMPT = """You are an AI business analyst assistant embedded in a Business Health
-Analyzer dashboard. Answer the user's question about their company using ONLY the financial
-context provided below. Be concise, specific, and always cite the relevant numbers. If asked
-to predict something, use the forecast data provided; do not invent figures that aren't in
-the context."""
+CHAT_SYSTEM_PROMPT = """You are the AI CFO — an on-call financial advisor embedded in this SME's
+AIBHA dashboard, speaking to the business owner directly (not a generic analyst summarizing a
+report). Answer using ONLY the financial context provided below: metrics, health score, risks,
+forecasts, recommendations, cash runway, and goal progress. Be concise, always cite the actual
+numbers, and never invent a figure that isn't in the context.
+
+Act like a CFO, not a search engine: when the data supports it, don't just answer the literal
+question — say what it means for the business and what to do next (e.g. if asked about cash and
+runway is under 3 months, say so plainly and point to the one or two levers that would help most,
+drawing on the recommendations and goals context). If a number needed to answer isn't in the
+context (e.g. no goals set, no forecast run yet), say so directly and suggest which page would
+produce it, rather than guessing. Keep replies short — a few sentences, not a report — this is a
+chat widget, not an essay. Use the prior turns of this conversation for continuity: don't
+re-introduce yourself or repeat context the user already has if this isn't the first message."""
 
 
 def _get_client() -> OpenAI | None:
@@ -66,18 +75,23 @@ def generate_recommendations_llm(context: dict) -> list[dict] | None:
         return None
 
 
-def answer_chat_llm(context: dict, question: str) -> str | None:
+def answer_chat_llm(context: dict, question: str, history: list[dict] | None = None) -> str | None:
     client = _get_client()
     if client is None:
         return None
 
+    # Prior turns give the model real multi-turn memory (follow-up questions like "and
+    # what about next quarter?" resolve correctly) without re-sending the full context
+    # on every turn — only the latest turn carries the fresh data snapshot.
+    messages = [{"role": "system", "content": CHAT_SYSTEM_PROMPT}]
+    for turn in (history or [])[-10:]:
+        messages.append({"role": turn["role"], "content": turn["content"]})
+    messages.append({"role": "user", "content": f"Business data:\n{json.dumps(context)}\n\nQuestion: {question}"})
+
     try:
         response = client.chat.completions.create(
             model=settings.OPENAI_MODEL,
-            messages=[
-                {"role": "system", "content": CHAT_SYSTEM_PROMPT},
-                {"role": "user", "content": f"Business data:\n{json.dumps(context)}\n\nQuestion: {question}"},
-            ],
+            messages=messages,
             temperature=0.3,
         )
         return response.choices[0].message.content

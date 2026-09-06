@@ -11,6 +11,7 @@ from app.models.prediction import Prediction
 from app.models.recommendation import Recommendation
 from app.models.report import Report
 from app.models.goal import Goal
+from app.models.chat_message import ChatMessage
 
 __all__ = [
     "User",
@@ -22,4 +23,5 @@ __all__ = [
     "Recommendation",
     "Report",
     "Goal",
+    "ChatMessage",
 ]

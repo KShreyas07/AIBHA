@@ -32,3 +32,4 @@ class Company(Base):
     recommendations: Mapped[list["Recommendation"]] = relationship(back_populates="company", cascade="all, delete-orphan")
     reports: Mapped[list["Report"]] = relationship(back_populates="company", cascade="all, delete-orphan")
     goals: Mapped[list["Goal"]] = relationship(back_populates="company", cascade="all, delete-orphan")
+    chat_messages: Mapped[list["ChatMessage"]] = relationship(back_populates="company", cascade="all, delete-orphan")
