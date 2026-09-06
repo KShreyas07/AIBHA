@@ -7,13 +7,23 @@ from app.core.logging import get_logger
 
 logger = get_logger(__name__)
 
-RECOMMENDATION_SYSTEM_PROMPT = """You are a senior financial advisor for small and medium businesses.
+RECOMMENDATION_SYSTEM_PROMPT = """You are a senior financial advisor for small and medium businesses,
+acting as an action planner: prioritize and quantify recommendations, don't just list generic advice.
 Given a company's financial metrics, health score, and detected risks, produce 4-6 specific,
 actionable recommendations. Each recommendation MUST reference the actual numbers provided
 (e.g. "Profit margin fell to 4.2%, below the 8% healthy threshold ...").
-Respond ONLY with JSON: a list of objects with keys "category" (one of: expenses, inventory,
-customer, cash, marketing, debt, revenue), "priority" (low, medium, high), "text" (the
-recommendation, referencing the data), "based_on" (the specific metric(s) driving it)."""
+Respond ONLY with JSON: a list of objects with keys:
+- "category": one of expenses, inventory, customer, cash, marketing, debt, revenue
+- "priority": low, medium, or high
+- "text": the recommendation, referencing the data
+- "based_on": the specific metric(s) driving it
+- "confidence": a number from 0 to 1 — how confident you are this action will help, given how
+  directly the data supports it (e.g. a metric far outside a healthy range = high confidence)
+- "impact_estimate": your best-effort estimate of the annualized dollar impact of taking this
+  action, as a plain number (e.g. 4500 or -1200), derived from the provided revenue/expense
+  figures — a realistic order-of-magnitude estimate, not a precise forecast. Use a negative
+  number only if the action itself costs money before it pays off.
+- "difficulty": low, medium, or high — how hard this is to actually implement"""
 
 CHAT_SYSTEM_PROMPT = """You are an AI business analyst assistant embedded in a Business Health
 Analyzer dashboard. Answer the user's question about their company using ONLY the financial

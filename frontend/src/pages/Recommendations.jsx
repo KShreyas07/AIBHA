@@ -13,6 +13,23 @@ const CATEGORY_ICON = {
   expenses: "💸", inventory: "📦", customer: "🤝", cash: "🏦", marketing: "📣", debt: "🏛️", revenue: "📈",
 };
 
+const DIFFICULTY_STYLES = {
+  low: "text-emerald-700 bg-emerald-50",
+  medium: "text-amber-700 bg-amber-50",
+  high: "text-red-700 bg-red-50",
+};
+
+const money = (v) =>
+  v == null ? null : `${v >= 0 ? "+" : "−"}$${Math.abs(v).toLocaleString(undefined, { maximumFractionDigits: 0 })}/yr`;
+
+function sortByImpact(recs) {
+  return [...recs].sort((a, b) => {
+    const ai = a.impact_estimate ?? -Infinity;
+    const bi = b.impact_estimate ?? -Infinity;
+    return Math.abs(bi) - Math.abs(ai);
+  });
+}
+
 export default function Recommendations() {
   const { selectedCompanyId } = useCompany();
   const [recs, setRecs] = useState([]);
@@ -25,7 +42,7 @@ export default function Recommendations() {
     setLoading(true);
     try {
       const { data } = await api.get(`/recommendations/${selectedCompanyId}`);
-      setRecs(data);
+      setRecs(sortByImpact(data));
     } finally {
       setLoading(false);
     }
@@ -40,7 +57,7 @@ export default function Recommendations() {
     setError("");
     try {
       const { data } = await api.post(`/recommendations/${selectedCompanyId}`);
-      setRecs(data);
+      setRecs(sortByImpact(data));
     } catch (err) {
       setError(err.response?.data?.detail || "Could not generate recommendations — run analysis first.");
     } finally {
@@ -59,7 +76,10 @@ export default function Recommendations() {
   return (
     <AppLayout>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-ink-900">AI Recommendations</h1>
+        <div>
+          <h1 className="text-2xl font-semibold text-ink-900">AI Action Planner</h1>
+          <p className="text-sm text-ink-500">Ranked by estimated annual impact.</p>
+        </div>
         <button className="btn-primary" onClick={generate} disabled={generating}>
           {generating ? "Generating…" : "Generate Recommendations"}
         </button>
@@ -76,12 +96,25 @@ export default function Recommendations() {
             <div className="flex items-start gap-3">
               <span className="text-xl">{CATEGORY_ICON[r.category] || "💡"}</span>
               <div className="flex-1">
-                <div className="mb-1 flex items-center gap-2">
+                <div className="mb-1 flex flex-wrap items-center gap-2">
                   <span className="rounded-full bg-cream-100 px-2 py-0.5 text-[10px] uppercase text-ink-500">{r.category}</span>
                   <span className="rounded-full bg-cream-100 px-2 py-0.5 text-[10px] uppercase text-ink-500">{r.priority} priority</span>
+                  {r.difficulty && (
+                    <span className={`rounded-full px-2 py-0.5 text-[10px] uppercase ${DIFFICULTY_STYLES[r.difficulty] || "text-ink-500 bg-cream-100"}`}>
+                      {r.difficulty} effort
+                    </span>
+                  )}
+                  {money(r.impact_estimate) && (
+                    <span className="rounded-full bg-ink-900 px-2 py-0.5 text-[10px] font-semibold text-cream-50">
+                      {money(r.impact_estimate)}
+                    </span>
+                  )}
                 </div>
                 <p className="text-sm text-ink-900">{r.text}</p>
-                {r.based_on && <p className="mt-1 text-xs text-ink-400">Based on: {r.based_on}</p>}
+                <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-ink-400">
+                  {r.based_on && <span>Based on: {r.based_on}</span>}
+                  {r.confidence != null && <span>Confidence: {Math.round(r.confidence * 100)}%</span>}
+                </div>
               </div>
             </div>
           </div>

@@ -45,6 +45,9 @@ class RecommendationOut(BaseModel):
     priority: str
     text: str
     based_on: str | None = None
+    confidence: float | None = None
+    impact_estimate: float | None = None
+    difficulty: str | None = None
     created_at: datetime
 
 
