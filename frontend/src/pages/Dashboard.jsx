@@ -27,6 +27,34 @@ function trendDataset(points, label, color) {
   };
 }
 
+function runwayForecastDataset(points) {
+  return {
+    labels: points.map((p) => p.period.slice(0, 7)),
+    datasets: [
+      {
+        label: "Projected Cash Balance",
+        data: points.map((p) => p.predicted_value),
+        borderColor: CHART_COLORS.brand,
+        backgroundColor: `${CHART_COLORS.brand}22`,
+        segment: {
+          borderColor: (ctx) => (ctx.p0.parsed.y < 0 || ctx.p1.parsed.y < 0 ? CHART_COLORS.red : CHART_COLORS.brand),
+        },
+        fill: true,
+        tension: 0.3,
+        pointRadius: 2,
+      },
+      {
+        label: "Break-even",
+        data: points.map(() => 0),
+        borderColor: "#948A78",
+        borderDash: [4, 4],
+        pointRadius: 0,
+        fill: false,
+      },
+    ],
+  };
+}
+
 function pieDataset(obj) {
   return {
     labels: Object.keys(obj),
@@ -43,6 +71,7 @@ function pieDataset(obj) {
 export default function Dashboard() {
   const { selectedCompanyId, selectedCompany } = useCompany();
   const [data, setData] = useState(null);
+  const [cashRunway, setCashRunway] = useState(null);
   const [loading, setLoading] = useState(false);
   const [running, setRunning] = useState(false);
   const [error, setError] = useState("");
@@ -53,6 +82,14 @@ export default function Dashboard() {
     try {
       const { data } = await api.get(`/dashboard/${selectedCompanyId}`);
       setData(data);
+      if (data.has_data) {
+        api
+          .get(`/dashboard/${selectedCompanyId}/cash-runway`)
+          .then((r) => setCashRunway(r.data))
+          .catch(() => setCashRunway(null));
+      } else {
+        setCashRunway(null);
+      }
     } finally {
       setLoading(false);
     }
@@ -115,6 +152,23 @@ export default function Dashboard() {
             </p>
           )}
 
+          {cashRunway && cashRunway.severity !== "healthy" && (
+            <div
+              className={`mb-6 rounded-2xl border px-4 py-3 text-sm ${
+                cashRunway.severity === "critical"
+                  ? "border-red-200 bg-red-50 text-red-800"
+                  : "border-amber-200 bg-amber-50 text-amber-800"
+              }`}
+            >
+              <strong>{cashRunway.severity === "critical" ? "⚠ Cash Runway Critical" : "⚠ Cash Runway Warning"}:</strong>{" "}
+              at the current burn rate ({money(cashRunway.avg_monthly_burn)}/mo), cash runs out in{" "}
+              <strong>
+                {cashRunway.runway_months} month{cashRunway.runway_months === 1 ? "" : "s"}
+              </strong>
+              {cashRunway.depletion_date && <> — around {cashRunway.depletion_date}</>}.
+            </div>
+          )}
+
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             <StatCard label="Revenue" value={money(data.cards.revenue)} />
             <StatCard label="Profit" value={money(data.cards.profit)} accent={data.cards.profit >= 0 ? "text-emerald-600" : "text-red-600"} />
@@ -163,6 +217,52 @@ export default function Dashboard() {
               <p className="py-6 text-center text-sm text-ink-500">Run analysis to see your Business DNA profile.</p>
             )}
           </div>
+
+          {cashRunway && (
+            <div className="mt-6 card">
+              <p className="mb-1 text-sm font-medium text-ink-700">Cash Runway</p>
+              <p className="mb-3 text-xs text-ink-400">
+                Trailing burn rate cross-checked against the 12-month cash-flow forecast.
+              </p>
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+                <div className="space-y-4 md:col-span-1">
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-ink-500">Current Cash</p>
+                    <p className="text-xl font-semibold text-ink-900">{money(cashRunway.current_cash)}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-ink-500">Avg. Monthly Burn</p>
+                    <p className="text-xl font-semibold text-ink-900">
+                      {cashRunway.avg_monthly_burn > 0 ? money(cashRunway.avg_monthly_burn) : "Stable / growing"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-ink-500">Runway</p>
+                    <p
+                      className={`text-xl font-semibold ${
+                        cashRunway.severity === "critical"
+                          ? "text-red-600"
+                          : cashRunway.severity === "warning"
+                          ? "text-amber-600"
+                          : "text-emerald-600"
+                      }`}
+                    >
+                      {cashRunway.runway_months == null ? "12+ months" : `${cashRunway.runway_months} months`}
+                    </p>
+                  </div>
+                </div>
+                <div className="h-56 md:col-span-2">
+                  {cashRunway.forecast_points.length > 0 ? (
+                    <Line data={runwayForecastDataset(cashRunway.forecast_points)} options={baseLineOptions} />
+                  ) : (
+                    <p className="flex h-full items-center justify-center text-center text-sm text-ink-500">
+                      Not enough history yet to forecast a cash trajectory — at least 3 months of data are needed.
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
             <div className="card">

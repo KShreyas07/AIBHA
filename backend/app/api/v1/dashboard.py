@@ -5,6 +5,7 @@ from app.api.deps import get_owned_company
 from app.database.session import get_db
 from app.models.company import Company
 from app.services.benchmark_service import get_benchmark
+from app.services.cash_runway_service import get_cash_runway
 from app.services.dashboard_service import get_dashboard
 
 router = APIRouter()
@@ -19,5 +20,13 @@ def dashboard(company: Company = Depends(get_owned_company), db: Session = Depen
 def benchmark(company: Company = Depends(get_owned_company), db: Session = Depends(get_db)) -> dict:
     try:
         return get_benchmark(db, company)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@router.get("/{company_id}/cash-runway")
+def cash_runway(company: Company = Depends(get_owned_company), db: Session = Depends(get_db)) -> dict:
+    try:
+        return get_cash_runway(db, company.id)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
