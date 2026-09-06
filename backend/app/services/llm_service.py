@@ -41,6 +41,34 @@ chat widget, not an essay. Use the prior turns of this conversation for continui
 re-introduce yourself or repeat context the user already has if this isn't the first message."""
 
 
+AGENT_PROMPTS = {
+    "cash_flow": """You are a cash-flow specialist agent. You see ONLY the cash position data below
+(current cash, burn rate, runway, severity) — nothing else about this business. Respond ONLY with
+JSON: {"severity": "low"|"medium"|"high", "summary": "1-2 sentences on the cash position",
+"recommendation": "one concrete action"}.""",
+    "risk": """You are a risk-assessment specialist agent. You see ONLY the detected risk flags and
+health score below — nothing else about this business. Respond ONLY with JSON: {"severity":
+"low"|"medium"|"high", "summary": "1-2 sentences on the risk picture", "recommendation": "one
+concrete action"}.""",
+    "growth": """You are a growth specialist agent. You see ONLY revenue/customer growth rates and
+industry percentile below — nothing else about this business. Respond ONLY with JSON: {"severity":
+"low"|"medium"|"high", "summary": "1-2 sentences on the growth trajectory", "recommendation": "one
+concrete action"}.""",
+    "goals": """You are a goals-tracking specialist agent. You see ONLY the company's stated goals
+and their progress below — nothing else about this business. Respond ONLY with JSON: {"severity":
+"low"|"medium"|"high", "summary": "1-2 sentences on goal progress", "recommendation": "one concrete
+action"}.""",
+}
+
+ORCHESTRATOR_SYSTEM_PROMPT = """You are the Chief of Staff synthesizing findings from four
+specialist agents (Cash Flow, Risk, Growth, Goals) into one executive briefing for the business
+owner. You do NOT see the underlying financial data yourself — only each specialist's own summary
+and severity rating, given below. Write 3-5 sentences: state the overall verdict, name the single
+most urgent issue and which agent flagged it, then give one clear next step. Do not just restate
+all four findings — synthesize and prioritize, the way a chief of staff briefs an executive who
+doesn't have time to read four separate reports."""
+
+
 def _get_client() -> OpenAI | None:
     if not settings.OPENAI_API_KEY:
         return None
@@ -97,4 +125,52 @@ def answer_chat_llm(context: dict, question: str, history: list[dict] | None = N
         return response.choices[0].message.content
     except Exception:  # noqa: BLE001
         logger.exception("LLM chat completion failed; falling back to rule-based answer")
+        return None
+
+
+def run_agent_llm(domain: str, data: dict) -> dict | None:
+    """One specialist agent's LLM call — deliberately given only `data`, its own
+    bounded slice of context, never the company's full financial picture."""
+    client = _get_client()
+    if client is None:
+        return None
+
+    try:
+        response = client.chat.completions.create(
+            model=settings.OPENAI_MODEL,
+            messages=[
+                {"role": "system", "content": AGENT_PROMPTS[domain]},
+                {"role": "user", "content": json.dumps(data, default=str)},
+            ],
+            response_format={"type": "json_object"},
+            temperature=0.3,
+        )
+        parsed = json.loads(response.choices[0].message.content)
+        if not all(k in parsed for k in ("severity", "summary", "recommendation")):
+            return None
+        return parsed
+    except Exception:  # noqa: BLE001 - degrade to this agent's rule-based fallback
+        logger.exception("Agent LLM call failed for domain=%s; falling back to rule-based", domain)
+        return None
+
+
+def run_orchestrator_llm(data: dict) -> str | None:
+    """The orchestrator's LLM call — sees only the four specialists' own findings
+    (summary + severity), never the raw data those specialists analyzed."""
+    client = _get_client()
+    if client is None:
+        return None
+
+    try:
+        response = client.chat.completions.create(
+            model=settings.OPENAI_MODEL,
+            messages=[
+                {"role": "system", "content": ORCHESTRATOR_SYSTEM_PROMPT},
+                {"role": "user", "content": json.dumps(data, default=str)},
+            ],
+            temperature=0.3,
+        )
+        return response.choices[0].message.content
+    except Exception:  # noqa: BLE001
+        logger.exception("Orchestrator LLM call failed; falling back to rule-based synthesis")
         return None
