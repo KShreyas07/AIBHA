@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-import { Line, Pie } from "react-chartjs-2";
+import { Line, Pie, Radar } from "react-chartjs-2";
 import AppLayout from "../components/AppLayout";
 import StatCard from "../components/StatCard";
 import HealthGauge from "../components/HealthGauge";
 import api from "../services/api";
 import { useCompany } from "../context/CompanyContext";
-import { CHART_COLORS, baseLineOptions, basePieOptions } from "../chartSetup";
+import { CHART_COLORS, baseLineOptions, basePieOptions, dnaRadarDataset, radarOptions } from "../chartSetup";
 
 const money = (v) => (v == null ? "—" : `$${Number(v).toLocaleString(undefined, { maximumFractionDigits: 0 })}`);
 
@@ -147,6 +147,21 @@ export default function Dashboard() {
                 <Line data={trendDataset(data.charts.revenue_trend, "Revenue", CHART_COLORS.brand)} options={baseLineOptions} />
               </div>
             </div>
+          </div>
+
+          <div className="mt-6 card">
+            <p className="mb-1 text-sm font-medium text-ink-700">Business DNA</p>
+            <p className="mb-3 text-xs text-ink-400">
+              The six health-score dimensions, each scaled to 0-100% of its own max — a shape you can compare
+              month over month.
+            </p>
+            {hasPrediction ? (
+              <div className="mx-auto h-72 max-w-sm">
+                <Radar data={dnaRadarDataset(data.health_score_gauge.breakdown)} options={radarOptions} />
+              </div>
+            ) : (
+              <p className="py-6 text-center text-sm text-ink-500">Run analysis to see your Business DNA profile.</p>
+            )}
           </div>
 
           <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
