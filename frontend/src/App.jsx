@@ -10,6 +10,7 @@ import Analytics from "./pages/Analytics";
 import Forecast from "./pages/Forecast";
 import Recommendations from "./pages/Recommendations";
 import Goals from "./pages/Goals";
+import DigitalTwin from "./pages/DigitalTwin";
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
 
@@ -27,6 +28,7 @@ export default function App() {
       <Route path="/forecast" element={<ProtectedRoute><Forecast /></ProtectedRoute>} />
       <Route path="/recommendations" element={<ProtectedRoute><Recommendations /></ProtectedRoute>} />
       <Route path="/goals" element={<ProtectedRoute><Goals /></ProtectedRoute>} />
+      <Route path="/digital-twin" element={<ProtectedRoute><DigitalTwin /></ProtectedRoute>} />
       <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
       <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
 

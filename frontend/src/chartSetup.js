@@ -93,3 +93,41 @@ export const radarOptions = {
     tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${ctx.raw}%` } },
   },
 };
+
+// Two-dataset variant for the Digital Twin: baseline (dashed, faint) overlaid with
+// the simulated what-if shape (solid), so the shift is visible axis by axis.
+export function dnaTwinRadarDataset(baselineBreakdown, simulatedBreakdown) {
+  const toPct = (breakdown) => DNA_AXES.map((a) => Math.round(((breakdown?.[a.key] || 0) / a.max) * 100));
+  return {
+    labels: DNA_AXES.map((a) => a.label),
+    datasets: [
+      {
+        label: "What-if",
+        data: toPct(simulatedBreakdown),
+        borderColor: CHART_COLORS.brand,
+        backgroundColor: `${CHART_COLORS.brand}33`,
+        pointBackgroundColor: CHART_COLORS.brand,
+        fill: true,
+        order: 1,
+      },
+      {
+        label: "Current",
+        data: toPct(baselineBreakdown),
+        borderColor: CHART_COLORS.slate,
+        backgroundColor: "transparent",
+        borderDash: [4, 4],
+        pointBackgroundColor: CHART_COLORS.slate,
+        fill: false,
+        order: 2,
+      },
+    ],
+  };
+}
+
+export const twinRadarOptions = {
+  ...radarOptions,
+  plugins: {
+    legend: { display: true, position: "bottom", labels: { color: "#453D31", boxWidth: 12, font: { size: 11 } } },
+    tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label} — ${ctx.label}: ${ctx.raw}%` } },
+  },
+};

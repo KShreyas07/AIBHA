@@ -8,6 +8,7 @@ const NAV_ITEMS = [
   { to: "/forecast", label: "Forecast", icon: "🔮" },
   { to: "/recommendations", label: "Recommendations", icon: "💡" },
   { to: "/goals", label: "Goals", icon: "🎯" },
+  { to: "/digital-twin", label: "Digital Twin", icon: "🧪" },
   { to: "/reports", label: "Reports", icon: "📄" },
   { to: "/settings", label: "Settings", icon: "⚙️" },
 ];
